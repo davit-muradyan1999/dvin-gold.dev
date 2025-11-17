@@ -83,7 +83,7 @@ class ProductController extends Controller
 
         $product->tags()->sync($tagsIds);
 
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     /**
@@ -128,8 +128,11 @@ class ProductController extends Controller
             'description.en' => 'required|string',
             'description.ru' => 'required|string',
             'price' => 'nullable',
-            'count' => 'required',
+            'count' => 'nullable',
             'category_id' => 'required|exists:categories,id',
+            'is_published' => 'nullable',
+            'is_private' => 'nullable',
+            'tags' => 'nullable|array',
         ]);
 
         $currentImages = $product->images ?? [];

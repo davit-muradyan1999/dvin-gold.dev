@@ -35,11 +35,11 @@ class HomeController extends Controller
             'about' => $about,
         ]);
     }
-    public function blogs(){
-        $blogs = Blog::select('id', 'title', 'description', 'image')->get();
+    public function philosophy(){
+        $philosophy = Blog::select('id', 'title', 'description', 'image')->first();
 
         return Inertia::render('blogs/Blogs', [
-            'blogs' => $blogs,
+            'philosophy' => $philosophy,
         ]);
     }
     public function boutiques(){
@@ -48,6 +48,10 @@ class HomeController extends Controller
         return Inertia::render('boutiques/Boutiques', [
             'boutiques' => $boutiques,
         ]);
+    }
+
+    public function authCheck(){
+        return Inertia::render('authCheck/AuthCheck');
     }
 
     public function categoriesProducts(Category $category, Request $request)
@@ -91,6 +95,49 @@ class HomeController extends Controller
         return Inertia::render('products/Products', [
             'private' => false,
             'category' => $category,
+            'products' => $query->get(),
+        ]);
+    }
+    public function collectionsProducts(Collections $collection, Request $request)
+    {
+        $locale = App::getLocale();
+        $query = $collection->products()->where('is_published', 1)->where('is_private', 0);
+        if ($request->availability === 'in_stock') {
+            $query->where('count', '>', 0);
+        } elseif ($request->availability === 'out_of_stock') {
+            $query->where('count', '=', 0);
+        }
+
+        switch ($request->sort) {
+            case 'a_z':
+                $query->orderByRaw("JSON_EXTRACT(title, '$.\"$locale\"') ASC");
+                break;
+            case 'z_a':
+                $query->orderByRaw("JSON_EXTRACT(title, '$.\"$locale\"') DESC");
+                break;
+            case 'price_low':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'asc':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'desc':
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'best':
+                $query->orderBy('id', 'asc');
+                break;
+            default:
+                $query->orderBy('id', 'desc');
+                break;
+        }
+
+        return Inertia::render('products/Products', [
+            'private' => false,
+            'collection' => $collection,
             'products' => $query->get(),
         ]);
     }

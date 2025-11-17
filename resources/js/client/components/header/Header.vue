@@ -1,30 +1,30 @@
 <template>
     <div>
-      <header class="app__header">
+        <SearchPopup ref="searchPopup" />
+      <header class="app__header"
+              :class="{ '!bg-[#e8e8e8] !shadow-md': scrolled }">
+          <div class="flex justify-end items-center gap-2 !px-2 !py-2">
+              <template v-if="!authUser">
+                  <Link href="/login" class="text-sm font-bold text-blue-600">{{ $t('login') }}</Link>
+                  <Link href="/register" class="text-sm font-bold text-green-600">{{ $t('register') }}</Link>
+              </template>
+
+              <template v-else>
+                  <span class="text-gray-700 text-sm font-bold">{{ authUser.full_name }}</span>
+                  <button @click="logout" class="text-red-600 text-sm font-bold">
+                      {{ $t('logout') }}
+                  </button>
+              </template>
+          </div>
         <div class="app-bar">
-          <div class="app-bar__wrapper">
-            <Link class="link--plain link-icon--expandOnHover app-bar__cart" href="/cart">
-              <img src="/public/client/icons/bascet.svg" alt="bascet">
-                <span class="badge link-icon__badge" v-if="cartCount > 0">{{ cartCount }}</span>
-            </Link>
+          <div class="flex app-bar__wrapper">
+<!--            <Link class="link&#45;&#45;plain link-icon&#45;&#45;expandOnHover app-bar__cart" href="/cart">-->
+<!--              <img src="/public/client/icons/bascet.svg" alt="bascet">-->
+<!--                <span class="badge link-icon__badge" v-if="cartCount > 0">{{ cartCount }}</span>-->
+<!--            </Link>-->
               <a aria-current="page" class="link--plain app-bar__company active" href="/">
-                  <img class="icon logo link-icon__icon" src="/public/client/icons/logo.svg"  alt="logo">
+                  <img class="icon logo link-icon__icon" src="/public/client/icons/logo.png"  alt="logo">
               </a>
-              <div class="max-w-xs min-w-[20px]">
-                  <div class="relative">
-                      <select v-model="selectedLanguage" @change="switchLanguage(selectedLanguage)"
-                              class="bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
-                          <option value="am">AM</option>
-                          <option value="en">EN</option>
-                          <option value="ru">RU</option>
-                      </select>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
-                           stroke="currentColor" class="h-5 w-5 ml-1 absolute top-2.5 right-2.5 text-slate-700">
-                          <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"/>
-                      </svg>
-                  </div>
-              </div>
               <button
                   type="button"
                   class="button--plain button-icon--expandOnHover app-bar__menu"
@@ -44,48 +44,41 @@
         </div>
         <nav class="nav-bar">
           <menu class="menu-list--metro nav-bar__menu">
-            <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/">Home</Link></li>
-            <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/about">About</Link></li>
-            <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/collections">Collections</Link></li>
-            <DropdownMenu />
-            <li class="menu-list__item"><a @click.prevent="openPopup" class="link--underlineOnHover menu-list__link" href="#">Authenticity check</a></li>
-            <li v-if="authUser && authUser.is_private" class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/private-club">Private club</Link></li>
-            <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/boutiques">Boutiques</Link></li>
-            <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/blogs">Blog</Link></li>
-            <template v-if="!authUser">
-                <li class="menu-list__item"><Link href="/login" class="link--underlineOnHover menu-list__link text-blue-600">Login</Link></li>
-                <li class="menu-list__item"><Link href="/register" class="link--underlineOnHover menu-list__link text-green-600">Register</Link></li>
-            </template>
+            <ul>
+                <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/">{{ $t('home') }}</Link></li>
+                <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/about">{{ $t('about') }}</Link></li>
+                <!--            <li class="menu-list__item"><Link class="link&#45;&#45;underlineOnHover menu-list__link" href="/collections">{{ $t('collections') }}</Link></li>-->
+                <DropdownMenu type="collections" />
+                <DropdownMenu type="category" />
 
-            <template v-else>
-                <li class="menu-list__item"><span class="link--underlineOnHover menu-list__link text-gray-700">Hi, {{ authUser.full_name }}</span></li>
-                <li class="menu-list__item"><button @click="logout" class="link--underlineOnHover menu-list__link text-red-600">
-                    Logout
-                </button></li>
-            </template>
-            <SearchPopup ref="searchPopup" />
+                <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/auth_check">{{ $t('auth_check') }}</Link></li>
+                <li v-if="authUser && authUser.is_private" class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/private-club">{{ $t('private_club') }}</Link></li>
+                <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/boutiques">{{ $t('boutiques') }}</Link></li>
+                <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/philosophy">{{ $t('philosophy') }}</Link></li>
+
+            </ul>
           </menu>
         </nav>
       </header>
         <aside class="nav-drawer" :class="{ expand: isDrawerOpen }" @click="closeDrawer" style="top: 145.922px">
             <menu class="menu-list--stack nav-drawer__menu">
-                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/">Home</Link></li>
-                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/about">About</Link></li>
-                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/collections">Collections</Link></li>
-                    <DropdownMenu />
-                    <li class="menu-list__item"><a @click.prevent="openPopup" class="link--underlineOnHover menu-list__link" href="#">Authenticity check</a></li>
-                    <li v-if="authUser && authUser.is_private" class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/private-club">Private club</Link></li>
-                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/boutiques">Boutiques</Link></li>
-                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/blogs">Blog</Link></li>
+                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/">{{ $t('home') }}</Link></li>
+                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/about">{{ $t('about') }}</Link></li>
+                    <DropdownMenu type="collections" @close-drawer="closeDrawerProgrammatically" />
+                    <DropdownMenu type="category" @close-drawer="closeDrawerProgrammatically" />
+                    <li class="menu-list__item"><a @click.prevent="openPopup" class="link--underlineOnHover menu-list__link" href="#">{{ $t('auth_check') }}</a></li>
+                    <li v-if="authUser && authUser.is_private" class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/private-club">{{ $t('private_club') }}</Link></li>
+                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/boutiques">{{ $t('boutiques') }}</Link></li>
+                    <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/blogs">{{ $t('blog') }}</Link></li>
                     <template v-if="!authUser">
-                        <li class="menu-list__item"><Link href="/login" class="link--underlineOnHover menu-list__link text-blue-600">Login</Link></li>
-                        <li class="menu-list__item"><Link href="/register" class="link--underlineOnHover menu-list__link text-green-600">Register</Link></li>
+                        <li class="menu-list__item"><Link href="/login" class="link--underlineOnHover menu-list__link text-blue-600">{{ $t('login') }}</Link></li>
+                        <li class="menu-list__item"><Link href="/register" class="link--underlineOnHover menu-list__link text-green-600">{{ $t('register') }}</Link></li>
                     </template>
 
                     <template v-else>
-                        <li class="menu-list__item"><span class="link--underlineOnHover menu-list__link text-gray-700">Hi, {{ authUser.full_name }}</span></li>
+                        <li class="menu-list__item"><span class="link--underlineOnHover menu-list__link text-gray-700">{{ authUser.full_name }}</span></li>
                         <li class="menu-list__item"><button @click="logout" class="link--underlineOnHover menu-list__link text-red-600">
-                            Logout
+                            {{ $t('logout') }}
                         </button></li>
                     </template>
             </menu>
@@ -93,11 +86,13 @@
     </div>
 </template>
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import DropdownMenu from './DropdownMenu.vue';
 import SearchPopup from '../searchPopup/SearchPopup.vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
+import { i18n } from '@/i18n'
 
+const scrolled = ref(false)
 const isDrawerOpen = ref(false);
 const authUser = usePage().props.auth?.user || null
 const cartCount = computed(() => usePage().props.cartCount);
@@ -107,6 +102,11 @@ const selectedLanguage = ref(locale.value)
 const switchLanguage = (locale) => {
     router.get(route('lang.switch', locale), {}, {
         preserveScroll: true,
+        onSuccess: (page) => {
+            const translations = page.props.translations
+            i18n.global.setLocaleMessage(locale, translations)
+            i18n.global.locale.value = locale
+        }
     })
 }
 function logout() {
@@ -116,16 +116,37 @@ function logout() {
         }
     })
 }
-const toggleDrawer = () => {
+const toggleDrawer = (event) => {
+    event.stopPropagation();
     isDrawerOpen.value = !isDrawerOpen.value;
+    document.body.classList.toggle('lock');
 };
+const closeDrawerProgrammatically = () => {
+    document.body.classList.remove('lock');
+    isDrawerOpen.value = false;
+};
+const closeDrawer = (event) => {
+    if (event && event.target.closest('.dropdown-menu')) return;
 
-const closeDrawer = () => {
+    document.body.classList.remove('lock');
     isDrawerOpen.value = false;
 };
 const openPopup = () => {
   searchPopup.value.openPopup();
 };
+
+
+onMounted(() => {
+    const onScroll = () => {
+        scrolled.value = window.scrollY > 50 // меняй число под свой порог
+    }
+    window.addEventListener('scroll', onScroll)
+    onScroll()
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', onScroll)
+})
 </script>
 <style lang="scss" scoped>
 @use "../../../../assets/styles/colors.scss";
@@ -133,6 +154,7 @@ const openPopup = () => {
 .logo{
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
   .badge {
       border-radius: .5rem;

@@ -10,6 +10,15 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <section class="content">
         <div class="container-fluid">
@@ -19,8 +28,10 @@
                     @method('POST')
                     <div class="card-body">
                         <div class="form-group">
+
+
                             <label for="title"> Title AM</label>
-                            <input type="text" name="title[am]" value="{{ old('title.am') }}" class="form-control" id="title" placeholder="Title AM">
+                            <input type="text" name="title[am]" value="{{ old('title.am') }}" class="form-control" id="title" placeholder="Title AM" required>
                         </div>
                         <div class="form-group">
                             <label for="title"> Title EN</label>
@@ -32,19 +43,15 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Description AM</label>
-                            <textarea class="form-control" id="description" name="description[am]" rows="3">{{ old('description.am') }}</textarea>
+                            <textarea class="form-control" id="editor_am" name="description[am]" rows="3">{{ old('description.am') }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="description">Description EN</label>
-                            <textarea class="form-control" id="description" name="description[en]" rows="3">{{ old('description.en') }}</textarea>
+                            <textarea class="form-control" id="editor_en" name="description[en]" rows="3">{{ old('description.en') }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="description">Description RU</label>
-                            <textarea class="form-control" id="description" name="description[ru]" rows="3">{{ old('description.ru') }}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="price"> Price </label>
-                            <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="price" placeholder="Price">
+                            <textarea class="form-control" id="editor_ru" name="description[ru]" rows="3">{{ old('description.ru') }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="count"> Count </label>
@@ -53,7 +60,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" id="imageUpload" name="images[]" multiple class="custom-file-input">
+                                    <input type="file" id="imageUpload" name="images[]" multiple class="custom-file-input" required>
                                     <label class="custom-file-label" for="imageUpload">Choose files</label>
                                 </div>
                             </div>
@@ -63,10 +70,10 @@
                         <div class="form-group">
                             <label for="category">Category</label>
                             <div class="select2-purple">
-                                <select name="category_id" id="category" class="select2" data-placeholder="Select a Category" data-dropdown-css-class="select2-purple" style="width: 100%;">
+                                <select name="category_id" id="category" class="select2" data-placeholder="Select a Category" data-dropdown-css-class="select2-purple" style="width: 100%;" required>
                                     <option value="" disabled selected></option>
                                    @foreach($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->title}}</option>
+                                        <option value="{{$category->id}}">{{$category->title['am']}}</option>
                                    @endforeach
                                 </select>
                             </div>
@@ -83,7 +90,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-check-label mr-4" for="is_published">Is Published:</label>
-                            <input type="checkbox" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }} class="form-check-input mt-1" id="is_admin">
+                            <input type="checkbox" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }} class="form-check-input mt-1" id="is_published">
                         </div>
                         <div class="form-group">
                             <label class="form-check-label mr-4" for="is_private">Is Private:</label>
@@ -124,6 +131,26 @@
             $(this).parent().remove();
         });
 
+        ClassicEditor
+            .create(document.querySelector('#editor_am'), {
+            validation: {
+                required: true
+            }
+    })
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor_en'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        ClassicEditor
+            .create(document.querySelector('#editor_ru'))
+            .catch(error => {
+                console.error(error);
+            });
 
     });
 </script>

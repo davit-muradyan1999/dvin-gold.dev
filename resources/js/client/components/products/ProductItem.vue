@@ -1,4 +1,5 @@
 <template>
+    <RequestPrice v-if="showModal" :isOpen="showModal" :productId="productId" @close="showModal = false" />
     <div class="product-template">
         <div class="product-template__info-gallery-wrapper">
             <!-- Галерея изображений -->
@@ -67,35 +68,15 @@
             </div>
             <div class="product-template__info">
                 <div class="product-template__info__wrapper">
-                    <hgroup class="product-template__info__heading-group"><h1 class="text-heading-1 heading">{{ product.title[locale] }}</h1></hgroup>
-                    <span class="text-price product-template__info__price "><span>{{ product.price }}</span></span>
-                    <div class="product-template__info__cart"><span class="product-template__info__cart__qty-label">Quantity</span>
-                        <div class="button-quantity product-template__info__cart__qty">
-                            <button type="button" @click="decreaseQty"
-                                    class="button--plain  button-icon button-quantity__minus">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                     viewBox="0 0 1024 1024" class="icon minus button-icon__icon">
-                                    <path class="icon__path"
-                                          d="M213.333 554.667h597.333c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-597.333c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
-                                </svg>
-                            </button>
-                            <span class="button-quantity__quantity">{{ quantity }}</span>
-                            <button type="button"  @click="increaseQty"
-                                    class="button--plain  button-icon button-quantity__plus">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                     viewBox="0 0 1024 1024" class="icon plus button-icon__icon">
-                                    <path class="icon__path"
-                                          d="M213.333 554.667h256v256c0 23.552 19.115 42.667 42.667 42.667s42.667-19.115 42.667-42.667v-256h256c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-256v-256c0-23.552-19.115-42.667-42.667-42.667s-42.667 19.115-42.667 42.667v256h-256c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <button type="button" :disabled="!isAvailable" @click="addToCart"
-                                class="button--outlined product-template__info__cart__add">Add to cart
+                    <hgroup class="product-template__info__heading-group"><h1 class="text-heading-1 heading">{{ product.title[locale] || product.title.am }}</h1></hgroup>
+                    <div class="product-template__info__cart">
+                        <button type="button" @click="showModal = true"
+                                class="button--outlined product-template__info__cart__add">Request a Price
                         </button>
                     </div>
                     <div class="product-template__info__content-wrapper">
                         <div class="content">
-                            <p v-html="product.description[locale]"></p>
+                            <p v-html="product.description[locale] || product.description.am"></p>
                         </div>
                         <template v-if="is_auth_check">
                             <div class="content">
@@ -117,17 +98,10 @@
 <script setup>
 import {computed, ref, watch} from "vue";
 import {Link, router, usePage} from "@inertiajs/vue3";
+import RequestPrice from "@/client/components/products/RequestPrice.vue";
 
-const cartCount = computed(() => usePage().props.cartCount);
-const quantity = ref(1);
-const isAvailable = computed(() => props.product.count > 0);
-const increaseQty = () => {
-    quantity.value++;
-};
 
-const decreaseQty = () => {
-    if (quantity.value > 1) quantity.value--;
-};
+const showModal = ref(false)
 const isZoomOpen = ref(false);
 const selectedImage = ref(null);
 const locale = computed(() => usePage().props.locale);
@@ -136,18 +110,7 @@ const props = defineProps({
     product: Object,
     is_auth_check: Object
 });
-const addToCart = () => {
-    router.post(route('cart.add'), {
-        product_id: props.product.id,
-        quantity: quantity.value
-    }, {
-        preserveScroll: true,
-        onSuccess: (response) => {
-            alert('Product added to cart!');
-            cartCount.value = response.cartCount;
-        }
-    })
-}
+const productId = props.product.id;
 const getImageUrl = (imagePath) => {
     return `/storage/${imagePath}`;
 };
@@ -312,6 +275,7 @@ $breakPoint2: 450px;
 
         p {
             margin-bottom: 2rem;
+            word-break: break-word;
         }
 
         ul {
@@ -450,7 +414,13 @@ $breakPoint2: 450px;
     clip-path: inset(50% 0 50% 0);
     opacity: 0;
     transition: visibility 0s linear 0.5s, clip-path 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    @media (max-width: $breakPoint) {
+        padding: 3rem;
+    }
 
+    @media (max-width: $breakPoint2) {
+        padding: 1rem;
+    }
     &.visible {
         transition: visibility 0s linear, clip-path 0.5s ease-in-out, opacity 0.5s ease-in-out;
         opacity: 1;
@@ -668,6 +638,10 @@ $breakPoint2: 450px;
 .text-heading-1 {
     @extend .text-heading;
     font-size: 2.125rem;
+
+    @media (max-width: $breakPoint) {
+        font-size: 1.125rem;
+    }
 }
 
 .text-heading-2 {

@@ -4,22 +4,52 @@
             <div class="sitemap--dark app-footer__sitemap">
                 <h4 class="text-heading-4 sitemap__heading">Get to know Craft</h4>
                 <ul class="sitemap__list">
-                    <li class="sitemap__list-item"><a class="link--underlineOnHover sitemap__link" href="/react-based-shopify-craft-theme/about">About</a></li>
-                    <li class="sitemap__list-item"><a class="link--underlineOnHover sitemap__link" href="/react-based-shopify-craft-theme/blog">Magazine</a></li>
+                    <li class="sitemap__list-item"><Link class="link--underlineOnHover sitemap__link" href="/about">About</Link></li>
+                    <li class="sitemap__list-item"><Link class="link--underlineOnHover sitemap__link" href="/blogs">Blogs</Link></li>
                 </ul>
             </div>
             <div class="card-info app-footer__mission"><strong class="card-info__title">Our Mission</strong>
                 <p class="card-info__description">We create products that are as enjoyable as they are ethical.</p>
             </div>
+            <div class="max-w-xs min-w-[20px] mt-3">
+                <div class="relative">
+                    <select v-model="selectedLanguage" @change="switchLanguage(selectedLanguage)"
+                            class="bg-transparent placeholder:text-slate-100 text-slate-300 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
+                        <option value="am">AM</option>
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2"
+                         stroke="currentColor" class="h-5 w-5 ml-1 absolute top-[89px] left-[34px] text-slate-300">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"/>
+                    </svg>
+                </div>
+            </div>
         </div>
         <hr class="app-footer__separator">
         <div class="app-footer__wrapper">
-            <small class="app-footer__copyright">©2025,<a href="https://themes.shopify.com/themes/craft/styles/default" target="_blank" rel="noreferrer"> theme-craft-demo</a><a href="https://www.shopify.com/" target="_blank" rel="noreferrer"> Powered by Shopify</a></small></div>
+            <small class="app-footer__copyright">©2025, Dvin Gold</small></div>
     </footer>
 </template>
 
 <script setup>
 
+import {Link, router, usePage} from '@inertiajs/vue3';
+import {computed, ref} from "vue";
+
+const locale = computed(() => usePage().props.locale);
+const selectedLanguage = ref(locale.value)
+const switchLanguage = (locale) => {
+    router.get(route('lang.switch', locale), {}, {
+        preserveScroll: true,
+        onSuccess: (page) => {
+            const translations = page.props.translations
+            i18n.global.setLocaleMessage(locale, translations)
+            i18n.global.locale.value = locale
+        }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
