@@ -406,7 +406,7 @@ $breakPoint2: 450px;
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 25;
+    z-index: 1001;
     background-color: colors.$charcoal-300;
     box-sizing: border-box;
     padding: 5rem;
@@ -457,7 +457,7 @@ $breakPoint2: 450px;
     background-color: colors.$charcoal600;
     width: 2.5rem;
     height: 2.5rem;
-    z-index: 26;
+    z-index: 1002;
     border-radius: 0.5rem;
 }
 

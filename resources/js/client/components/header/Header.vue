@@ -2,20 +2,7 @@
     <div>
         <SearchPopup ref="searchPopup" />
       <header class="app__header"
-              :class="{ '!bg-[#e8e8e8] !shadow-md': scrolled }">
-          <div class="flex justify-end items-center gap-2 !px-2 !py-2">
-              <template v-if="!authUser">
-                  <Link href="/login" class="text-sm font-bold text-blue-600">{{ $t('login') }}</Link>
-                  <Link href="/register" class="text-sm font-bold text-green-600">{{ $t('register') }}</Link>
-              </template>
-
-              <template v-else>
-                  <span class="text-gray-700 text-sm font-bold">{{ authUser.full_name }}</span>
-                  <button @click="logout" class="text-red-600 text-sm font-bold">
-                      {{ $t('logout') }}
-                  </button>
-              </template>
-          </div>
+              :class="{ '!bg-white !shadow-md': scrolled }">
         <div class="app-bar">
           <div class="flex app-bar__wrapper">
 <!--            <Link class="link&#45;&#45;plain link-icon&#45;&#45;expandOnHover app-bar__cart" href="/cart">-->
@@ -52,7 +39,7 @@
                 <DropdownMenu type="category" />
 
                 <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/auth_check">{{ $t('auth_check') }}</Link></li>
-                <li v-if="authUser && authUser.is_private" class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/private-club">{{ $t('private_club') }}</Link></li>
+                <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/private-club">{{ $t('private_club') }}</Link></li>
                 <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/boutiques">{{ $t('boutiques') }}</Link></li>
                 <li class="menu-list__item"><Link class="link--underlineOnHover menu-list__link" href="/philosophy">{{ $t('philosophy') }}</Link></li>
 

@@ -22,10 +22,9 @@ class InertiaLoginController extends Controller
         ]);
 
         $remember = $request->boolean('remember');
-
-        if (Auth::attempt($credentials + ['is_admin' => 0], $remember)) {
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return Inertia::location('/');
+            return Inertia::location('/private-club');
         }
 
         return back()->withErrors([

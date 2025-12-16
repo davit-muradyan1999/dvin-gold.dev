@@ -20,6 +20,11 @@
                         <div class="mr-2">
                             <a href="{{ route('abouts.edit', $about->id) }}" class="btn btn-outline-success">Edit About</a>
                         </div>
+                        <form action="{{ route('abouts.destroy', $about->id) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <input type="submit" class="btn btn-outline-danger" value="Delete">
+                        </form>
                     </div>
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">

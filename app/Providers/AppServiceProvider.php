@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Vite::useBuildDirectory('build');
         Paginator::useBootstrap();
         if (config('app.env') === 'production') {
             URL::forceScheme('https');

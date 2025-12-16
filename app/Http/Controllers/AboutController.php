@@ -17,13 +17,9 @@ class AboutController extends Controller
      */
     public function index()
     {
-        $about = About::first();
 
-        if(isset($about)){
-            return view('about.show', compact('about'));
-        }else{
-            return view('about.create');
-        }
+        $abouts = About::all();
+        return view('about.index', compact('abouts'));
     }
 
     /**
@@ -33,7 +29,7 @@ class AboutController extends Controller
      */
     public function create()
     {
-        return view('abouts.create');
+        return view('about.create');
     }
 
     /**
@@ -78,7 +74,7 @@ class AboutController extends Controller
             'description' => $description
         ]));
 
-        return redirect()->route('abouts.show', $about->id)->with('success', 'About was added successfully');
+        return redirect()->route('abouts.index', $about->id)->with('success', 'About was added successfully');
     }
 
     /**
@@ -156,7 +152,7 @@ class AboutController extends Controller
             'description' => $description
         ]));
 
-        return redirect()->route('abouts.show', $about->id)->with('success', 'About updated successfully');
+        return redirect()->route('abouts.index', $about->id)->with('success', 'About updated successfully');
     }
 
     /**
@@ -165,8 +161,10 @@ class AboutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(About $about)
     {
-        //
+        $about->delete();
+
+        return redirect()->route('abouts.index')->with('success', 'Abouts deleted successfully');
     }
 }

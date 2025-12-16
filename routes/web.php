@@ -21,6 +21,7 @@ use App\Http\Controllers\{AboutController,
     ProductController,
     LanguageController};
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/run-seeder', function () {
+    Artisan::call('db:seed');
+});
+
 Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminLoginController::class, 'login']);
 Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
@@ -57,7 +64,7 @@ Route::get('/private-club', [HomeController::class, 'privateClub'])->name('priva
 Route::get('/categories/{category}', [HomeController::class, 'categoriesProducts'])->name('categories.products');
 Route::get('/collections/{collection}', [HomeController::class, 'collectionsProducts'])->name('collections.products');
 Route::get('/product/{id}', [HomeController::class, 'getProduct'])->name('product');
-Route::get('/auth-check/{id}', [HomeController::class, 'getAuthCheckProduct'])->name('product');
+Route::get('/auth-check/{id}', [HomeController::class, 'getAuthCheckProduct'])->name('authCheck');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
@@ -76,7 +83,7 @@ Route::group(['prefix'=>'admin', 'middleware' => 'isAdmin'], function(){
     Route::resource('boutiques', BoutiqueController::class);
     Route::resource('blogs', BlogController::class);
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/request-price', [RequestPriceController::class, 'index'])->name('orders.index');
+    Route::get('/request-price', [RequestPriceController::class, 'index'])->name('requestPrice');
     Route::get('/authenticity-checks', [AuthenticityCheckController::class, 'index'])->name('authenticity.index');
     Route::post('/authenticity-checks/import', [AuthenticityCheckController::class, 'import'])->name('authenticity.import');
     Route::get('/authenticity-checks/add', [AuthenticityCheckController::class, 'add'])->name('authenticity.add');

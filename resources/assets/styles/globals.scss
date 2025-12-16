@@ -209,6 +209,7 @@ $breakPoint2: 500px;
       line-height: 1rem;
       color: colors.$charcoal300;
       transition: color 0.2s ease-in-out;
+        text-transform: uppercase !important;
 
       &:hover {
         color: colors.$charcoal100;
@@ -331,7 +332,9 @@ $breakPoint2: 500px;
   z-index: 10;
 
   // #region shared
-
+    .menu-list__link{
+        text-transform: uppercase !important;
+    }
   .menu-list__link,
   .menu-list__sub-list-link,
   .menu-list__button {
@@ -573,4 +576,15 @@ $breakPoint2: 500px;
 .icon__path {
   transition: fill 0.3s ease-in-out;
   fill: colors.$charcoal100;
+}
+.landing__heading{
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.125rem !important;
+    height: 1rem !important;
+    line-height: 1rem !important;
+    color: #7a7a7a !important;
+    transition: color 0.2s
+    ease-in-out !important;
+    text-transform: uppercase;
 }

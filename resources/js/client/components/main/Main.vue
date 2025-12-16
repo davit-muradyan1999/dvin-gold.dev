@@ -1,12 +1,16 @@
+<script setup>
+</script>
 <template>
-            <Collage :categories="categories" />
+            <Collage :categories="categories" :newArivals="newArivals" :collections="collections" />
 </template>
 
 <script setup>
 import Collage from './collage/Collage.vue';
 
 defineProps({
-    categories: Array
+    categories: Array,
+    newArivals: Array,
+    collections: Array,
 });
 
 </script>

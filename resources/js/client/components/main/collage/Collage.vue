@@ -1,7 +1,41 @@
 <template>
     <div class="!flex !items-center !gap-4 !my-8">
         <div class="!flex-grow !border-t !border-black"></div>
-        <h1 class="text-heading-1 landing__heading">Sustainably crafted goods to elevate your everyday.</h1>
+        <h1 class="text-heading-1 landing__heading">New Arivals</h1>
+        <div class="!flex-grow !border-t !border-black"></div>
+    </div>
+
+    <ul class="collage--5-piece landing__multi-link-collage">
+        <li v-for="item in newArivals" :key="item.id" class="collage__item-wrapper">
+            <Link class="link-image landing__multi-link-collage-item" :href="`/categories/${item.id}`">
+                <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+item.images ?? ''})` }"></span>
+                <span class="link-image__title">
+          <span class="link-image__title-text">{{ getTitle(item.title) }}</span>
+          <img class="icon arrow-right link-image__title-icon" src="/public/client/icons/right.svg" alt="right">
+        </span>
+            </Link>
+        </li>
+    </ul>
+    <div class="!flex !items-center !gap-4 !my-8">
+        <div class="!flex-grow !border-t !border-black"></div>
+        <h1 class="text-heading-1 landing__heading">Collections</h1>
+        <div class="!flex-grow !border-t !border-black"></div>
+    </div>
+
+    <ul class="collage--5-piece landing__multi-link-collage">
+        <li v-for="item in collections" :key="item.id" class="collage__item-wrapper">
+            <Link class="link-image landing__multi-link-collage-item" :href="`/categories/${item.id}`">
+                <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+item.image ?? ''})` }"></span>
+                <span class="link-image__title">
+          <span class="link-image__title-text">{{ getTitle(item.name) }}</span>
+          <img class="icon arrow-right link-image__title-icon" src="/public/client/icons/right.svg" alt="right">
+        </span>
+            </Link>
+        </li>
+    </ul>
+    <div class="!flex !items-center !gap-4 !my-8">
+        <div class="!flex-grow !border-t !border-black"></div>
+        <h1 class="text-heading-1 landing__heading">Categories</h1>
         <div class="!flex-grow !border-t !border-black"></div>
     </div>
 
@@ -10,7 +44,7 @@
             <Link class="link-image landing__multi-link-collage-item" :href="`/categories/${category.id}`">
                 <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+category.image ?? ''})` }"></span>
                 <span class="link-image__title">
-          <span class="link-image__title-text">{{ category.title[locale] }}</span>
+          <span class="link-image__title-text">{{ getTitle(category.title) }}</span>
           <img class="icon arrow-right link-image__title-icon" src="/public/client/icons/right.svg" alt="right">
         </span>
             </Link>
@@ -44,7 +78,9 @@ import {computed, onMounted, ref} from "vue";
 
 const locale = computed(() => usePage().props.locale);
 let props = defineProps({
-    categories: Array
+    categories: Array,
+    newArivals: Array,
+    collections: Array,
 });
 
 const container = ref(null)
@@ -64,6 +100,13 @@ onMounted(() => {
         window.instgrm.Embeds.process()
     }
 })
+const getTitle = (title) => {
+    return title[locale.value]
+        || title.en
+        || title.ru
+        || title.am
+        || ''
+}
 </script>
 
 <style lang="scss" scoped>

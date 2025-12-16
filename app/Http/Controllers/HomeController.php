@@ -12,12 +12,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
+use Auth;
 class HomeController extends Controller
 {
     public function __invoke(){
-        $categories = Category::select('id', 'title', 'image')->take(5)->get();
+        $categories = Category::select('id', 'title', 'image')->take(3)->get();
+        $newArival = Product::take(3)->latest()->get();
+        $collections = Collections::take(3)->get();
+
         return Inertia::render('home/Home', [
-            'categories' => $categories
+            'categories' => $categories,
+            'newArivals' => $newArival,
+            'collections' => $collections,
         ]);
     }
 
@@ -29,10 +35,10 @@ class HomeController extends Controller
         ]);
     }
     public function abouts(){
-        $about = About::select('id', 'title', 'description', 'image')->first();
+        $abouts = About::select('id', 'title', 'description', 'image')->get();
 
         return Inertia::render('about/About', [
-            'about' => $about,
+            'abouts' => $abouts,
         ]);
     }
     public function philosophy(){
@@ -144,6 +150,11 @@ class HomeController extends Controller
 
     public function privateClub(Request $request)
     {
+        if(!Auth::user()){
+            return redirect()->route('register');
+        }else if(!Auth::user()->is_private){
+            return redirect()->route('home');
+        }
         $query = Product::where('is_published', 1)->where('is_private', 1);
 
         if ($request->availability === 'in_stock') {

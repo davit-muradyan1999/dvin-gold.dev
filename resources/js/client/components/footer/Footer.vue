@@ -29,7 +29,10 @@
         </div>
         <hr class="app-footer__separator">
         <div class="app-footer__wrapper">
-            <small class="app-footer__copyright">©2025, Dvin Gold</small></div>
+            <small class="app-footer__copyright">
+                ©{{ currentYear }}, DVINGOLD
+            </small>
+        </div>
     </footer>
 </template>
 
@@ -50,6 +53,7 @@ const switchLanguage = (locale) => {
         }
     })
 }
+const currentYear = new Date().getFullYear()
 </script>
 
 <style lang="scss" scoped>
