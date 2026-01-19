@@ -5,10 +5,10 @@
               :class="{ '!bg-white !shadow-md': scrolled }">
         <div class="app-bar">
           <div class="flex app-bar__wrapper">
-<!--            <Link class="link&#45;&#45;plain link-icon&#45;&#45;expandOnHover app-bar__cart" href="/cart">-->
-<!--              <img src="/public/client/icons/bascet.svg" alt="bascet">-->
-<!--                <span class="badge link-icon__badge" v-if="cartCount > 0">{{ cartCount }}</span>-->
-<!--            </Link>-->
+            <Link class="link--plain link-icon--expandOnHover app-bar__cart" href="/wishlist">
+              <img src="/public/client/icons/wishlist.png" alt="wishlist">
+                <span class="badge link-icon__badge" v-if="cartCount > 0">{{ cartCount }}</span>
+            </Link>
               <a aria-current="page" class="link--plain app-bar__company active" href="/">
                   <img class="icon logo link-icon__icon" src="/public/client/icons/logo.png"  alt="logo">
               </a>

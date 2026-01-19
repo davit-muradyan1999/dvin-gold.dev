@@ -1,14 +1,14 @@
 <template>
     <li :class="wrapperClass" ref="dropdownRef" @click.stop>
-        <button @click="toggleDropdown" type="button" class="button--plain menu-list__button">
+        <button type="button" class="button--plain menu-list__button">
             <template v-if="type === 'category'">
-                <span>{{ $t('categories') }}</span>
+                <Link href="/categories-list">{{ $t('categories') }}</Link>
             </template>
             <template v-else>
-                <span>{{ $t('collections') }}</span>
+                <Link href="/collections-list">{{ $t('collections') }}</Link>
             </template>
-            <img v-if="!isOpen" class="icon chevron-down menu-list__button-icon down" src="/public/client/icons/arrow-down.svg" alt="arrow-down">
-            <img v-else class="icon chevron-up menu-list__button-icon up" src="/public/client/icons/arrow-up.svg" alt="arrow-up">
+            <img @click="toggleDropdown" v-if="!isOpen" class="icon chevron-down menu-list__button-icon down" src="/public/client/icons/arrow-down.svg" alt="arrow-down">
+            <img  @click="toggleDropdown" v-else class="icon chevron-up menu-list__button-icon up" src="/public/client/icons/arrow-up.svg" alt="arrow-up">
         </button>
         <transition>
         <ul v-show="isOpen" class="menu-list__sub-list">
@@ -135,7 +135,7 @@ const wrapperClass = computed(() => ({
         }
 
         .menu-list__link,
-        .menu-list__button span {
+        .menu-list__button a {
             display: block;
             font-size: 0.875rem;
             font-weight: 600;
@@ -144,6 +144,7 @@ const wrapperClass = computed(() => ({
             line-height: 1rem;
             color: colors.$charcoal300;
             transition: color 0.2s ease-in-out;
+            text-transform: uppercase;
 
             &:hover {
                 color: colors.$charcoal100;
@@ -228,7 +229,7 @@ const wrapperClass = computed(() => ({
 
         &.expand {
             .menu-list__button {
-                span {
+                a {
                     color: colors.$charcoal100;
                 }
                 text-decoration: underline;
@@ -332,7 +333,7 @@ const wrapperClass = computed(() => ({
                     overflow: hidden;
                     border-bottom: 0.0625rem solid colors.$charcoal600;
 
-                    span {
+                    a {
                         display: block;
                         width: 100%;
                         height: 2rem;

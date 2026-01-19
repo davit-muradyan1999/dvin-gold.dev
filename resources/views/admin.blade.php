@@ -140,6 +140,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('legalNotices.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-info"></i>
+                                <p>
+                                    Legal Notice
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('blogs.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-blog"></i>
                                 <p>

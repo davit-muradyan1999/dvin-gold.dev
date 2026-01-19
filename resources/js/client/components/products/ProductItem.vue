@@ -73,6 +73,11 @@
                         <button type="button" @click="showModal = true"
                                 class="button--outlined product-template__info__cart__add">Request a Price
                         </button>
+                        <button type="button" @click="addToCart" :disabled="wishlistDisabled"
+                                class="button--outlined product-template__info__cart__add"
+                                :style="wishlistDisabled ? { opacity: '0.5', cursor: 'not-allowed' } : {}"
+                        >Add to Wishlist
+                        </button>
                     </div>
                     <div class="product-template__info__content-wrapper">
                         <div class="content">
@@ -108,8 +113,22 @@ const locale = computed(() => usePage().props.locale);
 
 const props = defineProps({
     product: Object,
-    is_auth_check: Object
+    is_auth_check: Object,
+    wishlistDisabled: Boolean
 });
+const quantity = ref(1);
+
+const addToCart = () => {
+    router.post(route('cart.add'), {
+        product_id: props.product.id,
+        quantity: quantity.value
+    }, {
+        preserveScroll: true,
+        onSuccess: (response) => {
+            alert('Product added to wishlist.');
+        }
+    })
+}
 const productId = props.product.id;
 const getImageUrl = (imagePath) => {
     return `/storage/${imagePath}`;

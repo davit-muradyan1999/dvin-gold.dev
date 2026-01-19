@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\About;
 use App\Models\Blog;
 use App\Models\Boutique;
+use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Collections;
+use App\Models\LegalNotice;
 use App\Models\Product;
+use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
@@ -27,7 +30,15 @@ class HomeController extends Controller
         ]);
     }
 
-    public function collections(){
+    public function categoriesList(){
+        $categories = Category::select('id', 'title', 'image')->get();
+
+        return Inertia::render('categories/Categories', [
+            'categories' => $categories,
+        ]);
+    }
+
+    public function collectionsList(){
         $collections = Collections::select('id', 'name', 'image')->get();
 
         return Inertia::render('collections/Collections', [
@@ -39,6 +50,12 @@ class HomeController extends Controller
 
         return Inertia::render('about/About', [
             'abouts' => $abouts,
+        ]);
+    }
+    public function legalNotice(){
+        $legalNotice = LegalNotice::select('id', 'title', 'description')->first();
+        return Inertia::render('legalNotice/LegalNotice', [
+            'legalNotice' => $legalNotice,
         ]);
     }
     public function philosophy(){
@@ -198,15 +215,27 @@ class HomeController extends Controller
     }
     public function getProduct(Request $request)
     {
+        $wishlist = CartItem::with('product', 'user')
+            ->where('product_id', $request->id)
+            ->first();
+        $wishlistDisabled = $wishlist ?? false;
+
         return Inertia::render('products/ProductItem', [
             'product' => Product::where('id', $request->id)->first(),
+            'wishlistDisabled' => $wishlistDisabled,
         ]);
     }
 
     public function getAuthCheckProduct(Request $request)
     {
+        $wishlist = CartItem::with('product', 'user')
+            ->where('product_id', $request->id)
+            ->first();
+        $wishlistDisabled = $wishlist ?? false;
+
         return Inertia::render('products/ProductItem', [
             'is_auth_check' => true,
+            'wishlistDisabled' => $wishlistDisabled,
             'product' => Product::with('auth_check')->where('id', $request->id)->first(),
         ]);
     }

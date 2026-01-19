@@ -7,7 +7,7 @@
 
     <ul class="collage--5-piece landing__multi-link-collage">
         <li v-for="item in newArivals" :key="item.id" class="collage__item-wrapper">
-            <Link class="link-image landing__multi-link-collage-item" :href="`/categories/${item.id}`">
+            <Link class="link-image landing__multi-link-collage-item" :href="`/product/${item.id}`">
                 <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+item.images ?? ''})` }"></span>
                 <span class="link-image__title">
           <span class="link-image__title-text">{{ getTitle(item.title) }}</span>
@@ -24,7 +24,7 @@
 
     <ul class="collage--5-piece landing__multi-link-collage">
         <li v-for="item in collections" :key="item.id" class="collage__item-wrapper">
-            <Link class="link-image landing__multi-link-collage-item" :href="`/categories/${item.id}`">
+            <Link class="link-image landing__multi-link-collage-item" :href="`/collections/${item.id}`">
                 <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+item.image ?? ''})` }"></span>
                 <span class="link-image__title">
           <span class="link-image__title-text">{{ getTitle(item.name) }}</span>

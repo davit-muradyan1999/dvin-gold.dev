@@ -19,7 +19,8 @@ use App\Http\Controllers\{AboutController,
     ShoesSizeController,
     UserController,
     ProductController,
-    LanguageController};
+    LanguageController,
+    LegalNoticeController};
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
@@ -35,8 +36,8 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 
-Route::get('/run-seeder', function () {
-    Artisan::call('db:seed');
+Route::get('/run-migration', function () {
+    Artisan::call('migrate');
 });
 
 Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
@@ -57,18 +58,21 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/lang/{locale}', [LanguageController::class, 'changeLocale'])->name('lang.switch');
 Route::get('/collections', [HomeController::class, 'collections'])->name('collections');
 Route::get('/about', [HomeController::class, 'abouts'])->name('about');
+Route::get('/legal-notice', [HomeController::class, 'legalNotice'])->name('legalNotice');
 Route::get('/philosophy', [HomeController::class, 'philosophy'])->name('philosophy');
 Route::get('/boutiques', [HomeController::class, 'boutiques'])->name('boutiques');
 Route::get('/auth_check', [HomeController::class, 'authCheck'])->name('auth-check');
 Route::get('/private-club', [HomeController::class, 'privateClub'])->name('private-club');
+Route::get('/categories-list', [HomeController::class, 'categoriesList'])->name('categoriesList');
+Route::get('/collections-list', [HomeController::class, 'collectionsList'])->name('collectionsList');
 Route::get('/categories/{category}', [HomeController::class, 'categoriesProducts'])->name('categories.products');
 Route::get('/collections/{collection}', [HomeController::class, 'collectionsProducts'])->name('collections.products');
 Route::get('/product/{id}', [HomeController::class, 'getProduct'])->name('product');
 Route::get('/auth-check/{id}', [HomeController::class, 'getAuthCheckProduct'])->name('authCheck');
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/wishlist', [CartController::class, 'index'])->name('cart.index');
+Route::post('/wishlist/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/wishlist/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/wishlist/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/request-price', [RequestPriceController::class, 'store']);
 
@@ -80,6 +84,7 @@ Route::group(['prefix'=>'admin', 'middleware' => 'isAdmin'], function(){
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('abouts', AboutController::class);
+    Route::resource('legalNotices', LegalNoticeController::class);
     Route::resource('boutiques', BoutiqueController::class);
     Route::resource('blogs', BlogController::class);
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

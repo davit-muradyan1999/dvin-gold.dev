@@ -69,10 +69,6 @@ $breakPoint2: 500px;
   padding: 1.5rem;
 }
 
-.app-bar__cart {
-  order: 4;
-}
-
 .app-bar__company {
   display: block;
   height: 114px;
@@ -541,6 +537,7 @@ $breakPoint2: 500px;
   width: 2rem;
   height: 2rem;
   position: relative;
+  left: 97%;
 }
 
 .link-icon--expandOnHover {

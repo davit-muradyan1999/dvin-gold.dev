@@ -3,7 +3,7 @@ import {computed, onMounted} from "vue";
 import {Link, usePage} from "@inertiajs/vue3";
 
 defineProps({
-    collections: Array,
+    categories: Array,
 });
 const locale = computed(() => usePage().props.locale)
 
@@ -20,16 +20,16 @@ const getTitle = (title) => {
 
     <div class="!flex !items-center !gap-4 !my-8">
         <div class="!flex-grow !border-t !border-black"></div>
-        <h1 class="text-heading-1 landing__heading">Collections</h1>
+        <h1 class="text-heading-1 landing__heading">Categories</h1>
         <div class="!flex-grow !border-t !border-black"></div>
     </div>
 
     <ul class="collage--5-piece landing__multi-link-collage">
-        <li v-for="collection in collections" :key="collection.id" class="collage__item-wrapper">
-            <Link class="link-image landing__multi-link-collage-item" :href="`/collections/${collection.id}`">
-                <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+collection.image ?? ''})` }"></span>
+        <li v-for="category in categories" :key="category.id" class="collage__item-wrapper">
+            <Link class="link-image landing__multi-link-collage-item" :href="`/categories/${category.id}`">
+                <span class="link-image__image" :style="{ backgroundImage: `url(${'storage/'+category.image ?? ''})` }"></span>
                 <span class="link-image__title">
-          <span class="link-image__title-text">{{ getTitle(collection.name) }}</span>
+          <span class="link-image__title-text">{{ getTitle(category.title) }}</span>
           <img class="icon arrow-right link-image__title-icon" src="/public/client/icons/right.svg" alt="right">
         </span>
             </Link>

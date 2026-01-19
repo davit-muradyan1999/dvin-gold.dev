@@ -1,45 +1,29 @@
 <template>
-    <div class="cart-template__header"><h1 class="text-heading-1 cart-template__header__heading">Your cart</h1>
-    </div>
     <div class="cart-template__table-wrapper">
         <table class="cart-template__table">
             <thead class="cart-template__table__header">
             <tr>
                 <th>Product</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <th>Image</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody v-if="items.length" class="cart-template__table__body">
             <tr v-for="item in items" :key="item.id" class="cart-template__table__body__row">
                 <td class="cart-template__table__body__row__image-link-price">
-                    <img class="cart-template__table__body__row__image-link-price__image"
-                    :src="`/storage/${item.product.images[0]}`" alt="product">
+
                     <div>
-                    <a class="link--underlineOnHover cart-template__table__body__row__image-link-price__link"
-                            href="/react-based-shopify-craft-theme/products/the-tall-glasses">{{ item.product.title[locale] }}</a><span
-                        class="text-price cart-template__table__body__row__image-link-price__price"><span>{{ item.product.price }}</span></span>
+                        <Link class="link--underlineOnHover cart-template__table__body__row__image-link-price__link"
+                              :href="'/product/'+item.product.id" v-html="getTitle(item.product.title)">
+                        </Link>
                     </div>
                 </td>
                 <td class="cart-template__table__body__row__quantity">
-                    <div class="button-quantity  cart-template__table__body__row__quantity__button">
-                        <button type="button"
-                                class="button--plain  button-icon--expandOnHover disable button-quantity__minus">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                 viewBox="0 0 1024 1024" class="icon minus button-icon__icon">
-                                <path class="icon__path"
-                                      d="M213.333 554.667h597.333c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-597.333c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
-                            </svg>
-                        </button>
-                        <span class="button-quantity__quantity">{{ item.quantity }}</span>
-                        <button type="button" class="button--plain  button-icon--expandOnHover  button-quantity__plus">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                 viewBox="0 0 1024 1024" class="icon plus button-icon__icon">
-                                <path class="icon__path"
-                                      d="M213.333 554.667h256v256c0 23.552 19.115 42.667 42.667 42.667s42.667-19.115 42.667-42.667v-256h256c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-256v-256c0-23.552-19.115-42.667-42.667-42.667s-42.667 19.115-42.667 42.667v256h-256c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <img class="cart-template__table__body__row__image-link-price__image"
+                         :src="`/storage/${item.product.images[0]}`" alt="product">
+
+                </td>
+                <td class="cart-template__table__body__row__total">
                     <button type="button" @click="removeItem(item.id)"
                             class="button--plain  button-icon--expandOnHover  cart-template__table__body__row__quantity__remove">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -49,45 +33,40 @@
                         </svg>
                     </button>
                 </td>
-                <td class="cart-template__table__body__row__total"><span
-                    class="text-price cart-template__table__body__row__total__text"><span>{{ (item.product.price * item.quantity).toFixed(2) }}</span>
-</span></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="cart-template__subtotal">
-        <div><h4 class="text-heading-4 cart-template__subtotal__heading">Subtotal</h4><span
-            class="text-price cart-template__subtotal__price"><span>{{ subtotal }}</span></span></div>
-        <button
-            @click="checkout"
-            class="link--button cart-template__subtotal__check-out-row__button">
-            Check out
-        </button>
-    </div>
 </template>
 
 <script setup>
-import { router, usePage, Link } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import {router, usePage, Link} from '@inertiajs/vue3'
+import {computed} from 'vue'
 
-        const props = defineProps({
+const props = defineProps({
     items: Array
 })
 const locale = computed(() => usePage().props.locale)
 
 const removeItem = (id) => {
-    router.post(route('cart.remove'), { id }, { preserveScroll: true })
+    router.post(route('cart.remove'), {id}, {preserveScroll: true})
 }
 const subtotal = computed(() =>
     props.items.reduce((acc, item) => acc + item.quantity * item.product.price, 0).toFixed(2)
 )
 const checkout = () => {
-    router.post(route('checkout'), { items: props.items }, {
+    router.post(route('checkout'), {items: props.items}, {
         preserveScroll: true,
         onSuccess: () => {
         }
     })
+}
+const getTitle = (title) => {
+    return title[locale.value]
+        || title.en
+        || title.ru
+        || title.am
+        || ''
 }
 </script>
 <style lang="scss" scoped>
@@ -129,6 +108,7 @@ $breakPoint2: 450px;
 
 .button-quantity.disable {
     border-color: colors.$charcoal400;
+
     .button-quantity__quantity {
         color: colors.$charcoal300;
     }
@@ -158,6 +138,7 @@ $breakPoint2: 450px;
     &::-webkit-scrollbar-thumb {
         background-color: colors.$charcoal400;
     }
+
     overflow: auto;
 }
 
@@ -170,6 +151,7 @@ $breakPoint2: 450px;
 .cart-template__table__header {
     tr {
         border-bottom: 0.0625rem solid colors.$charcoal500;
+
         th {
             text-align: left;
             color: colors.$charcoal400;
@@ -177,6 +159,7 @@ $breakPoint2: 450px;
             letter-spacing: 0.0625rem;
             padding-bottom: 1rem;
             line-height: 1em;
+
             &:last-of-type {
                 text-align: right;
             }
@@ -253,12 +236,14 @@ $breakPoint2: 450px;
 .cart-template__table__body__row__quantity__remove {
     height: 2rem;
     width: 2rem;
-    float: left;
+    float: right;
     position: relative;
     top: 0.0625rem;
+
     svg {
         height: 1.25rem;
         width: 1.25rem;
+
         path {
             fill: colors.$charcoal300;
         }
@@ -359,6 +344,7 @@ $breakPoint2: 450px;
         a {
             height: 100%;
         }
+
         @media (max-width: $breakPoint) {
             min-width: calc((100% - 3rem) / 2);
         }
@@ -376,6 +362,7 @@ $breakPoint2: 450px;
     background-color: colors.$charcoal100;
     color: colors.$charcoal500 !important;
 }
+
 .link {
     color: colors.$charcoal100;
 }

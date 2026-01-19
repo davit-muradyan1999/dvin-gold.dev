@@ -14,9 +14,30 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: "Armenian Light";
+    src: url("../fonts/armenian/ARM-HMKS-LIGHT-BOLD.TTF") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Armenian Bold";
+    src: url("../fonts/armenian/ARM-HMKS-LIGHT-EXTRABOLD.TTF") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
 
-*, body {
+/**, body {*/
+/*    font-family: 'MyriadPro Light', sans-serif !important;*/
+/*}*/
+html[lang="en"] *, body {
     font-family: 'MyriadPro Light', sans-serif !important;
+}
+html[lang="ru"] *, body {
+    font-family: 'MyriadPro Light', sans-serif !important;
+}
+html[lang="am"] *, body {
+    font-family: "Armenian Bold", sans-serif !important;
 }
 .app__header {
     position: fixed;

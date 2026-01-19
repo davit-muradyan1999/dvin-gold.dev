@@ -3,9 +3,9 @@
         <div class="app-footer__wrapper">
             <div class="sitemap--dark app-footer__sitemap">
                 <h4 class="text-heading-4 sitemap__heading">Get to know Craft</h4>
-                <ul class="sitemap__list">
+                <ul class="sitemap__list" style="position: relative; z-index: 999999">
                     <li class="sitemap__list-item"><Link class="link--underlineOnHover sitemap__link" href="/about">About</Link></li>
-                    <li class="sitemap__list-item"><Link class="link--underlineOnHover sitemap__link" href="/blogs">Blogs</Link></li>
+                    <li class="sitemap__list-item"><Link class="link--underlineOnHover sitemap__link" href="/legal-notice">Legal Notice</Link></li>
                 </ul>
             </div>
             <div class="card-info app-footer__mission"><strong class="card-info__title">Our Mission</strong>
